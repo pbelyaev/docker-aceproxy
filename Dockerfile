@@ -17,14 +17,16 @@ RUN apt-get update && apt-get install -y \
     acestream-engine \
     python-gevent \
     python-psutil \
-    git
+    git \
+    supervisor
 
 # Install software
 RUN cd /opt/ && git clone https://github.com/ValdikSS/aceproxy.git aceproxy
 
 # Configuration
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY aceconfig.py /opt/aceproxy/aceconfig.py
 
 # CMD and PORTS
-CMD ["python /opt/aceproxy/acehttp.py"]
+CMD ["/usr/bin/supervisord"]
 EXPOSE 8000
